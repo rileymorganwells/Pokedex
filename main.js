@@ -1,5 +1,9 @@
-function pokeSubmit(){
-    var param = document.getElementById("pokeInput").value;
+function pokeSubmit(random){
+    var param = document.getElementById("pokeInput").value.toLowerCase();
+    if (random == true) {
+        randNumber = Math.floor(Math.random() * 803);
+        param = randNumber;
+    }
     var pokeURL = "https://pokeapi.co/api/v2/pokemon/" + param + "/";
     var settings = {
         "async": true,
@@ -10,75 +14,88 @@ function pokeSubmit(){
     }
     
     $.ajax(settings).done(function (response) {
-        console.log(response.name);
+        var pokeURL2 = "https://pokeapi.co/api/v2/pokemon-species/" + param + "/";
+        var settings2 = {
+            "async": true,
+            "crossDomain": true,
+            "url": pokeURL2,
+            "method": "GET",
+            "headers": {}
+        }
+        $.ajax(settings2).done(function (response2) {
+            pokeDescriptionFlavors = response2.flavor_text_entries;
+            pokeGenus = response2.genera.filter(checkLanguage)[0].genus;
+            pokeCaptureRate = response2.capture_rate;
+            pokeDescriptionEngFlavors = pokeDescriptionFlavors.filter(checkLanguage);
+            pokeDescription = pokeDescriptionEngFlavors[0].flavor_text;
+            console.log(response.id);
+            pokeName = response.name;
+            pokeName = capFirst(pokeName);
+            pokeHeight = response.height;
+            pokeWeight = response.weight;
+            pokeID = response.id;
+            pokeMoves = response.moves;
+            pokeMoves = pokeMoves.slice(0,5);
+            pokeAbilities = response.abilities;
+            pokeType = response.types[0].type.name;
+            pokeType = pokeType.toUpperCase();
+            pokeStats = response.stats;
 
-        var html = "<h2>" + response.name + "</h2>";
-        html += "<img src=\"" + response.sprites.front_default + "\">";
-        $(pokeDetails).html(html);
-
+            var html = "<div id=\"poke-card\" class=\"card text-white bg-primary mb-3\"><div class=\"card-header\"><h2 class=\"type-heading\">" + pokeName + "</h2></div>";
+            html += "<div class=\"card-body\"><div id=\"img-and-stats\"><img id=\"img-poke\" src=\"" + response.sprites.front_default + "\"><div id=\"type-and-id-and-stats\"><div id=\"type-and-id\"><div id=\"pokeType\">" + pokeType + "</div><div id=\"pokeID\">#" + pokeID + "</div>";
+            html += "</div><div id=\"stats\">";
+            for (var i = 0; i < pokeStats.length; i++) {
+                var currStateName = pokeStats[i].stat.name;
+                currStateName = capFirst(currStateName);
+                if (currStateName == "Special-defense") {
+                    currStateName = "Sp-defense";
+                }
+                if (currStateName == "Special-attack") {
+                    currStateName = "Sp-attack";
+                }
+                html += "<p class=\"statName\">" + currStateName + ": </p><p class=\"statNum\">" + pokeStats[i].base_stat + "</p><br>";
+            }
+            html += "</div></div></div>";
+            html += "<h4 class=\"type-heading\">" + pokeGenus + "</h4>";
+            html += "<p>" + pokeDescription + "</p>";
+            html += "<h4 class=\"type-heading\">Other Information</h4>";
+            if (response2.habitat) {
+                var pokeHabitat = response2.habitat.name;
+                pokeHabitat = capFirst(pokeHabitat);
+                html += "<li>Habitat: " + pokeHabitat + "</li>";
+            }
+            html += "<li>Height: " + pokeHeight + "</li>";
+            html += "<li>Weight: " + pokeWeight + "</li>";
+            html += "<li>Capture Rate: " + pokeCaptureRate + "</li>";
+            html += "<li>Abilities: ";
+            for (var i = 0; i < pokeAbilities.length; i++) {
+                if (i == pokeAbilities.length - 1) {
+                    html += pokeAbilities[i].ability.name;
+                }
+                else {
+                    html += pokeAbilities[i].ability.name + ", ";
+                }
+            }
+            html += "<li>Moves: ";
+            for (var i = 0; i < pokeMoves.length; i++) {
+                if (i == pokeMoves.length - 1) {
+                    html += pokeMoves[i].move.name;
+                }
+                else {
+                    html += pokeMoves[i].move.name + ", ";
+                }
+            }
+            html += "</li></div></div>";
+            
+            $(pokeDetails).html(html);
+        });
     });
 
-
-
-    var pokeURL2 = "https://pokeapi.co/api/v2/pokemon/" + param;
-
-
-    // $.getJSON(pokeURL, function(data){
-    //     console.log("test");
-    //     console.log(data);
-    //     var pokeID = data.national_id;
-    //     var pokeName = data.name;
-    //     var pokeType1 = data.types[0].name;
-    //     if (data.types.length == 2) {
-    //         var pokeType2 = data.types[1].name;
-    //     }
-    //     else var pokeType2 = null;
-    //     var descriptionURI = "https://pokeapi.co" + data.descriptions[0].resource_uri;
-    //     var pokeDescription = "";
-
-    //     $.getJSON(descriptionURI, function(data2){
-    //         //console.log(data2);
-    //         pokeDescription = data2.description;
-    //     });
-
-    //     $.getJSON(pokeURL2, function(data3){
-    //         //console.log(data3);
-
-    //          //console.log(JSON.stringify(data, null, "  "));
-    //         var imageURI = data3.sprites.front_default;
-
-    //         console.log("Number: ", pokeID);
-    //         console.log("Name: ", pokeName);
-    //         console.log("Type 1: ", pokeType1);
-    //         console.log("Type 2: ", pokeType2);
-    //         console.log("Description URI: ", descriptionURI);
-    //         console.log("Description: ", pokeDescription);
-    //         console.log("Image URI: ", imageURI);
-
-    //         // append data to HTML
-    //         // empty string to hold HTML
-    //         var li = "";
-    //         li += '<li><img src="' + imageURI + '">';
-    //         li += '<h1>#' + pokeID + ' ' + pokeName + '</h1>';
-    //         li += '<p>Type 1: ' + pokeType1 + '</p>';
-
-    //         // only display Type 2 if it is not null
-    //         if (pokeType2 != null){
-    //             li += '<p>Type 2: ' + pokeType2 + '</p>';
-    //         }
-
-    //         li += '<p>' + pokeDescription + '</p>';
-    //         li += '</li>';
-
-    //         // empty the listview
-    //         $("#pokeDetails").empty();
-
-    //         // append new li to listview
-    //         $("#pokeDetails").append(li).promise().done(function(){
-    //                 $(this).listview("refresh");
-    //         });
-
-    //     });
-
-    // });
+function checkLanguage(flavorEntry) {
+    return flavorEntry.language.name == "en";
+}
+function capFirst(string) 
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 }

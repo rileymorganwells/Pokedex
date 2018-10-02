@@ -1,7 +1,113 @@
 body {
-    background-color: red !important;
+    background-color: #007BFF !important;
 }
 
 .btn {
     margin-top: 10px;
+}
+
+input.btn.btn-primary {
+    border-color: #007BFF;
+    border-width: 2px;
+    background-color: #fff319;
+    color: #007BFF;
+    font-weight: bold;
+}
+input.btn.btn-primary:hover {
+    border-color: #fff319;
+    border-width: 2px;
+    background-color: #007BFF;
+    color: #fff319;
+    font-weight: bold;
+}
+
+#img-poke {
+
+    height: 160px;
+    width: 160px;
+}
+
+#pokeDetails {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#pokeInput {
+    max-width: 400px;
+    margin:0 auto;
+}
+
+div.container.jumbotron {
+    padding-top: 30px;
+    border-radius: 0px;
+    height: 100%;
+    margin-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+input {
+    text-align: center;
+}
+
+#poke-card {
+    max-width: 500px;
+    margin: auto;
+}
+
+#img-and-stats {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+#type-and-id {
+    display: flex;
+}
+
+#pokeID {
+    text-align: right;
+    display: block;
+    flex-grow: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#pokeType {
+    display: block;
+    background-color: white;
+    color: #007BFF;
+    font-weight: bold;
+    padding: 0px 10px 0px 10px;
+    border-radius: 2px;
+}
+
+#type-and-id-and-stats {
+    display: block;
+    flex-grow: 1;
+}
+
+#stats {
+    display: block;
+    text-align: left;
+}
+
+div#stats p {
+    margin: 0px;
+}
+
+p.statName {
+    width: 100px;
+    display: inline-block;
+}
+
+p.statNum {
+    display: inline;
+}
+
+.type-heading {
+    background-color: white;
+    color: #007BFF;
+    font-weight: bold;
+    padding: 3px 10px 6px 10px;
+    border-radius: 2px;
 }
