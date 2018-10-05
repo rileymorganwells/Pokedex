@@ -106,6 +106,9 @@ function pokeSubmit(random){
                 if (statRatio < .15) {
                     statRatio = .15;
                 }
+                if (statRatio > 1) {
+                    statRatio = 1;
+                }
                 $(this).css("transform","scaleX(" + statRatio + ")");
             });
         });
