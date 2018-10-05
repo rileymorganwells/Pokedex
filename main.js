@@ -48,35 +48,24 @@ function pokeSubmit(random){
                 var currStateName = pokeStats[i].stat.name;
                 currStateName = capFirst(currStateName);
                 if (currStateName == "Special-defense") {
-                    currStateName = "Sp-defense";
+                    currStateName = "Sp-def";
                 }
                 if (currStateName == "Special-attack") {
-                    currStateName = "Sp-attack";
+                    currStateName = "Sp-att";
                 }
-                html += "<p class=\"statName\">" + currStateName + ": </p><p class=\"statNum\">" + pokeStats[i].base_stat + "</p><br>";
+                if (currStateName == "Attack") {
+                    currStateName = "Att";
+                }
+                if (currStateName == "Defense") {
+                    currStateName = "Def";
+                }
+                html += "<div class=\"statRow\"><span class=\"statName\">" + currStateName + ": </span><span class=\"statBar\"><div class=\"statBG\"></div><div class=\"statNum\">" + pokeStats[i].base_stat + "</div></span></div>";
             }
             html += "</div></div></div>";
             html += "<h4 class=\"type-heading\">" + pokeGenus + "</h4>";
             html += "<p>" + pokeDescription + "</p>";
-            html += "<h4 class=\"type-heading\">Other Information</h4>";
-            if (response2.habitat) {
-                var pokeHabitat = response2.habitat.name;
-                pokeHabitat = capFirst(pokeHabitat);
-                html += "<li>Habitat: " + pokeHabitat + "</li>";
-            }
-            html += "<li>Height: " + pokeHeight + "</li>";
-            html += "<li>Weight: " + pokeWeight + "</li>";
-            html += "<li>Capture Rate: " + pokeCaptureRate + "</li>";
-            html += "<li>Abilities: ";
-            for (var i = 0; i < pokeAbilities.length; i++) {
-                if (i == pokeAbilities.length - 1) {
-                    html += pokeAbilities[i].ability.name;
-                }
-                else {
-                    html += pokeAbilities[i].ability.name + ", ";
-                }
-            }
-            html += "<li>Moves: ";
+            html += "<h4 class=\"type-heading\">Attributes</h4><div class=\"characteristics\">";
+            html += "<li><b>Moves:</b> ";
             for (var i = 0; i < pokeMoves.length; i++) {
                 if (i == pokeMoves.length - 1) {
                     html += pokeMoves[i].move.name;
@@ -85,9 +74,40 @@ function pokeSubmit(random){
                     html += pokeMoves[i].move.name + ", ";
                 }
             }
-            html += "</li></div></div>";
+            html += "<li><b>Abilities:</b> ";
+            for (var i = 0; i < pokeAbilities.length; i++) {
+                if (i == pokeAbilities.length - 1) {
+                    html += pokeAbilities[i].ability.name;
+                }
+                else {
+                    html += pokeAbilities[i].ability.name + ", ";
+                }
+            }
+            html += "<li><b>Capture Rate:</b> " + pokeCaptureRate + "</li>";
+            if (response2.habitat) {
+                var pokeHabitat = response2.habitat.name;
+                pokeHabitat = capFirst(pokeHabitat);
+                html += "<li><b>Habitat:</b> " + pokeHabitat + "</li>";
+            }
+            html += "<li><b>Height:</b> " + pokeHeight + "</li>";
+            html += "<li><b>Weight:</b> " + pokeWeight + "</li>";
+            html += "</li></div></div></div>";
             
             $(pokeDetails).html(html);
+
+            var statArray = [];
+            $('.statNum').each(function() {
+                var statRatio = $(this).html()/155;
+                console.log(statRatio);
+                statArray.push(statRatio);
+            });
+            $('.statBG').each(function(i, obj) {
+                var statRatio = statArray[i];
+                if (statRatio < .15) {
+                    statRatio = .15;
+                }
+                $(this).css("transform","scaleX(" + statRatio + ")");
+            });
         });
     });
 

@@ -55,6 +55,10 @@ input {
     margin: auto;
 }
 
+div.card-body {
+    padding: 10px;
+}
+
 #img-and-stats {
     display: flex;
     margin-bottom: 15px;
@@ -84,24 +88,12 @@ input {
 #type-and-id-and-stats {
     display: block;
     flex-grow: 1;
+    -webkit-box-flex: 1;
 }
 
 #stats {
     display: block;
     text-align: left;
-}
-
-div#stats p {
-    margin: 0px;
-}
-
-p.statName {
-    width: 100px;
-    display: inline-block;
-}
-
-p.statNum {
-    display: inline;
 }
 
 .type-heading {
@@ -111,3 +103,55 @@ p.statNum {
     padding: 3px 10px 6px 10px;
     border-radius: 2px;
 }
+
+.characteristics {
+    list-style-type: none;
+}
+
+div.statRow {
+    display: flex;
+    margin: 3px;
+}
+
+.statName {
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+.statBar {
+    position: relative;
+    flex-basis: 0;
+    flex-grow: 2;
+    background-color: #c9c9c9;
+    border-radius: 5px;
+}
+
+div.statBG {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    background: white;
+    /* transform: scaleX(0.698577); */
+    transform-origin: left;
+    z-index: 100000;
+    color: transparent;
+    border-radius: 5px;
+}
+
+div.statNum {
+    display: block;
+    color: #007BFF;
+    font-weight: bold;
+    padding-left: 4px;
+    border-radius: 5px;
+    z-index: 200000;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
